@@ -11,7 +11,6 @@
 
 #include <string.h>
 #include "y.tab.h"
-
 %}
 
 %%
@@ -39,7 +38,7 @@
 		return WORD;
 	}
 
-.	{
+'.'	{
 		/* Invalid character in input */
 		return NOTOKEN;
 	}

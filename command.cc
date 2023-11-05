@@ -67,7 +67,6 @@ void Command::insertSimpleCommand(SimpleCommand *simpleCommand)
 		_simpleCommands = (SimpleCommand **)realloc(_simpleCommands,
 													_numberOfAvailableSimpleCommands * sizeof(SimpleCommand *));
 	}
-
 	_simpleCommands[_numberOfSimpleCommands] = simpleCommand;
 	_numberOfSimpleCommands++;
 }
@@ -142,11 +141,22 @@ void Command::execute()
 		return;
 	}
 
+	for (int i = 0; i < _numberOfSimpleCommands; i++)
+	{
+		printf("In Command: %d\n",i);
+		for (int j = 0; j < _simpleCommands[i]->_numberOfArguments; j++)
+		{
+			printf("has argument: %s\n", _simpleCommands[i]->_arguments[j]);
+		}
+
+	}
+	
+	printf("= %d\n",_numberOfSimpleCommands);
 	// Print contents of Command data structure
 	// print();
 	// Add execution here
 	//////////////////////////////////
-	pid_t pid;
+	/*pid_t pid;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -168,6 +178,7 @@ void Command::execute()
 	{
 		wait(NULL);
 	}
+	*/
 	//////////////////////////////////////
 	// For every simple command fork a new process
 	// Setup i/o redirection

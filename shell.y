@@ -14,6 +14,7 @@
 %token	<string_val> WORD
 
 %token 	NOTOKEN GREAT NEWLINE 
+%token PIPE
 
 %union	{
 		char   *string_val;
@@ -55,6 +56,7 @@ simple_command:
 
 command_and_args:
 	command_word arg_list {
+		printf("on top\n");
 		Command::_currentCommand.
 			insertSimpleCommand( Command::_currentSimpleCommand );
 	}
@@ -68,15 +70,19 @@ arg_list:
 argument:
 	WORD {
                printf("   Yacc: insert argument \"%s\"\n", $1);
-
 	       Command::_currentSimpleCommand->insertArgument( $1 );\
 	}
 	;
-
+////////////////////////////////////////////////////////	
+argument:
+	PIPE {
+            printf("Yacc: You inserted PIPE Operator \n");
+	}
+	;
+////////////////////////////////////////////////////////
 command_word:
 	WORD {
-               printf("   Yacc: insert command \"%s\"\n", $1);
-	       
+            printf("   Yacc: insert command \"%s\"\n", $1);
 	       Command::_currentSimpleCommand = new SimpleCommand();
 	       Command::_currentSimpleCommand->insertArgument( $1 );
 	}
@@ -84,7 +90,7 @@ command_word:
 
 iomodifier_opt:
 	GREAT WORD {
-		printf("   Yacc: insert output \"%s\"\n", $2);
+		printf("   Yacc: insert output 3 \"%s\"\n", $2);
 		Command::_currentCommand._outFile = $2;
 	}
 	| /* can be empty */ 

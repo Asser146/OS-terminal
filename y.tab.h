@@ -58,7 +58,7 @@ extern int yydebug;
     NOTOKEN = 259,                 /* NOTOKEN  */
     GREAT = 260,                   /* GREAT  */
     NEWLINE = 261,                 /* NEWLINE  */
-    PIPE  = 262         
+    PIPE = 262                     /* PIPE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -71,18 +71,18 @@ extern int yydebug;
 #define NOTOKEN 259
 #define GREAT 260
 #define NEWLINE 261
-#define PIPE 262     //Added by Asser
+#define PIPE 262
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "shell.y"
+#line 19 "shell.y"
 
 		char   *string_val;
 	
 
-#line 84 "y.tab.h"
+#line 86 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
