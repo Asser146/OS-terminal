@@ -156,10 +156,14 @@ void Command::execute()
 
 	else if (pid == 0)
 	{
-		string path="/bin/";
-		strcat(path,_simpleCommands[0]->_arguments[0])
+		char path[20]="/bin/";
+		strcat(path,_simpleCommands[0]->_arguments[0]);//get path of the command in bin for execution
 		execvp(path, _simpleCommands[0]->_arguments);
+		perror( "Command Failed");
+		exit( 2 );
+		
 	}
+
 	else
 	{
 		wait(NULL);

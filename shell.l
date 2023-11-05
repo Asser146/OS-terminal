@@ -15,6 +15,11 @@
 %}
 
 %%
+"|"	{
+		return PIPE;	
+	}
+
+
 
 \n 	{
 		return NEWLINE;

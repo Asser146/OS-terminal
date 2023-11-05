@@ -112,7 +112,8 @@ extern int yydebug;
     WORD = 258,                    /* WORD  */
     NOTOKEN = 259,                 /* NOTOKEN  */
     GREAT = 260,                   /* GREAT  */
-    NEWLINE = 261                  /* NEWLINE  */
+    NEWLINE = 261,                  /* NEWLINE  */
+    PIPE =  262
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -125,6 +126,7 @@ extern int yydebug;
 #define NOTOKEN 259
 #define GREAT 260
 #define NEWLINE 261
+#define PIPE 262
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
