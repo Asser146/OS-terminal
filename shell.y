@@ -36,12 +36,21 @@ extern "C"
 goal:	
 	commands
 	;
+	
+pipeline:
+    command
+    | pipeline PIPE command
+    ;
 
 commands: 
+    pipeline
+    | commands pipeline 
+    ;    
+/*commands: 
 	command
 	| commands command 
 	;
-
+*/
 command: simple_command
         ;
 
@@ -54,14 +63,27 @@ simple_command:
 	| error NEWLINE { yyerrok; }
 	;
 
+
 command_and_args:
+    command_word arg_list {
+        printf("on top\n");
+        Command::_currentCommand.
+            insertSimpleCommand( Command::_currentSimpleCommand );
+    }
+    | command_and_args PIPE command_and_args {
+        printf("Yacc: You inserted PIPE Operator \n");
+        // Here you should handle the pipe operator
+    }
+    ;
+    
+/*command_and_args:
 	command_word arg_list {
 		printf("on top\n");
 		Command::_currentCommand.
 			insertSimpleCommand( Command::_currentSimpleCommand );
 	}
 	;
-
+*/
 arg_list:
 	arg_list argument
 	| /* can be empty */

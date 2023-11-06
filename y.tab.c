@@ -170,7 +170,6 @@ enum yysymbol_kind_t
   YYSYMBOL_commands = 10,                  /* commands  */
   YYSYMBOL_command = 11,                   /* command  */
   YYSYMBOL_simple_command = 12,            /* simple_command  */
-  YYSYMBOL_command_and_args = 13,          /* command_and_args  */
   YYSYMBOL_arg_list = 14,                  /* arg_list  */
   YYSYMBOL_argument = 15,                  /* argument  */
   YYSYMBOL_command_word = 16,              /* command_word  */

@@ -33,8 +33,7 @@ void SimpleCommand::insertArgument(char *argument)
 	{
 		// Double the available space
 		_numberOfAvailableArguments *= 2;
-		_arguments = (char **)realloc(_arguments,
-									  _numberOfAvailableArguments * sizeof(char *));
+		_arguments = (char **)realloc(_arguments,_numberOfAvailableArguments * sizeof(char *));
 	}
 
 	_arguments[_numberOfArguments] = argument;
