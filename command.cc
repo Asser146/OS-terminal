@@ -37,6 +37,8 @@ void SimpleCommand::insertArgument(char *argument)
 	}
 
 	_arguments[_numberOfArguments] = argument;
+	
+	printf("inserting new argument in coomand.c file: %s\n", _arguments[_numberOfArguments]);
 
 	// Add NULL argument at the end
 	_arguments[_numberOfArguments + 1] = NULL;
@@ -143,6 +145,7 @@ void Command::execute()
 	for (int i = 0; i < _numberOfSimpleCommands; i++)
 	{
 		printf("In Command: %d\n",i);
+		printf("number of arguments: %d\n",_simpleCommands[i]->_numberOfArguments);
 		for (int j = 0; j < _simpleCommands[i]->_numberOfArguments; j++)
 		{
 			printf("has argument: %s\n", _simpleCommands[i]->_arguments[j]);
@@ -150,7 +153,7 @@ void Command::execute()
 
 	}
 	
-	printf("= %d\n",_numberOfSimpleCommands);
+	printf("number of simple commands= %d\n",_numberOfSimpleCommands);
 	// Print contents of Command data structure
 	// print();
 	// Add execution here

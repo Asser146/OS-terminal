@@ -36,21 +36,12 @@ extern "C"
 goal:	
 	commands
 	;
-	
-pipeline:
-    command
-    | pipeline PIPE command
-    ;
-
+	  
 commands: 
-    pipeline
-    | commands pipeline 
-    ;    
-/*commands: 
 	command
 	| commands command 
 	;
-*/
+
 command: simple_command
         ;
 
@@ -65,25 +56,18 @@ simple_command:
 
 
 command_and_args:
-    command_word arg_list {
-        printf("on top\n");
-        Command::_currentCommand.
-            insertSimpleCommand( Command::_currentSimpleCommand );
-    }
-    | command_and_args PIPE command_and_args {
-        printf("Yacc: You inserted PIPE Operator \n");
-        // Here you should handle the pipe operator
-    }
-    ;
-    
-/*command_and_args:
 	command_word arg_list {
 		printf("on top\n");
 		Command::_currentCommand.
 			insertSimpleCommand( Command::_currentSimpleCommand );
 	}
+	| command_and_args PIPE command_word arg_list {
+       printf("Yacc: You inserted PIPE Operator \n");
+       Command::_currentCommand.
+           insertSimpleCommand( Command::_currentSimpleCommand ); // Insert the new simple command into the new command
+           
+   }
 	;
-*/
 arg_list:
 	arg_list argument
 	| /* can be empty */
@@ -95,13 +79,6 @@ argument:
 	       Command::_currentSimpleCommand->insertArgument( $1 );\
 	}
 	;
-////////////////////////////////////////////////////////	
-argument:
-	PIPE {
-            printf("Yacc: You inserted PIPE Operator \n");
-	}
-	;
-////////////////////////////////////////////////////////
 command_word:
 	WORD {
             printf("   Yacc: insert command \"%s\"\n", $1);
