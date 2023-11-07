@@ -18,7 +18,9 @@
 		return PIPE;	
 	}
 
-
+"exit" 	{
+	return EXIT;
+}
 
 \n 	{
 		return NEWLINE;
@@ -37,6 +39,7 @@
 		yylval.string_val = strdup(yytext);
 		return WORD;
 	}
+
 
 '.'	{
 		/* Invalid character in input */

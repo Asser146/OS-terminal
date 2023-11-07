@@ -15,7 +15,7 @@
 
 %token 	NOTOKEN GREAT NEWLINE 
 %token PIPE
-
+%token EXIT
 %union	{
 		char   *string_val;
 	}
@@ -40,6 +40,7 @@ goal:
 commands: 
 	command
 	| commands command 
+	| exit_shell
 	;
 
 command: simple_command
@@ -94,7 +95,13 @@ iomodifier_opt:
 	}
 	| /* can be empty */ 
 	;
-
+	
+exit_shell:
+	EXIT{
+	printf("exit was inserted\n");
+	return 0;
+	}	
+	;
 %%
 
 void

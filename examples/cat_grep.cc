@@ -85,7 +85,7 @@ main(int argc, char **argv, char **envp)
 		perror( "cat_grep: exec cat");
 		exit( 2 );
 	}
-	printf("test");
+	printf("test2");
 	//////////////////  grep //////////////////////////
 
 	// Input:    pipe
