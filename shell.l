@@ -29,6 +29,9 @@
 [ \t] 	{
 		/* Discard spaces and tabs */
      	}	
+">>" 	{
+		return GREAT2;
+	}
 
 ">" 	{
 		return GREAT;

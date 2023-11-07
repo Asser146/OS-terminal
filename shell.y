@@ -13,7 +13,7 @@
 
 %token	<string_val> WORD
 
-%token 	NOTOKEN GREAT NEWLINE 
+%token 	NOTOKEN GREAT GREAT2 NEWLINE 
 %token PIPE
 %token EXIT
 %union	{
@@ -40,10 +40,7 @@ goal:
 commands: 
 	command
 	| commands command 
-	| EXIT{
-	printf("exit was inserted\n");
-	return 0;
-	}
+	//| exit_shell
 	;
 
 command: simple_command
@@ -89,10 +86,18 @@ command_word:
 	       Command::_currentSimpleCommand = new SimpleCommand();
 	       Command::_currentSimpleCommand->insertArgument( $1 );
 	}
+	|EXIT{
+	printf("exit was inserted\n");
+	return 0;
+	}
 	;
 
 iomodifier_opt:
 	GREAT WORD {
+		printf("   Yacc: insert output 3 \"%s\"\n", $2);
+		Command::_currentCommand._outFile = $2;
+	}
+	|GREAT2 WORD {
 		printf("   Yacc: insert output 3 \"%s\"\n", $2);
 		Command::_currentCommand._outFile = $2;
 	}
