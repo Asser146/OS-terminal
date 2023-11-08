@@ -13,7 +13,7 @@
 
 %token	<string_val> WORD
 
-%token 	NOTOKEN GREAT GREAT2 NEWLINE 
+%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS
 %token PIPE
 %token EXIT
 %union	{
@@ -40,7 +40,6 @@ goal:
 commands: 
 	command
 	| commands command 
-	//| exit_shell
 	;
 
 command: simple_command
@@ -59,15 +58,12 @@ simple_command:
 command_and_args:
 	command_word arg_list {
 		printf("on top\n");
-		Command::_currentCommand.
-			insertSimpleCommand( Command::_currentSimpleCommand );
+		Command::_currentCommand.insertSimpleCommand( Command::_currentSimpleCommand );
 	}
 	| command_and_args PIPE command_word arg_list {
        printf("Yacc: You inserted PIPE Operator \n");
-       Command::_currentCommand.
-           insertSimpleCommand( Command::_currentSimpleCommand ); // Insert the new simple command into the new command
-           
-   }
+       Command::_currentCommand.insertSimpleCommand( Command::_currentSimpleCommand ); // Insert the new simple command into the new command 
+	}
 	;
 arg_list:
 	arg_list argument
@@ -101,15 +97,13 @@ iomodifier_opt:
 		printf("   Yacc: insert output 3 \"%s\"\n", $2);
 		Command::_currentCommand._outFile = $2;
 	}
+	|LESS WORD {
+	printf("   Yacc: insert output 3 \"%s\"\n", $2);
+		Command::_currentCommand._inputFile = $2;
+	}
 	| /* can be empty */ 
 	;
 	
-/*exit_shell:
-	EXIT{
-	printf("exit was inserted\n");
-	return 0;
-	}	
-	;*/
 %%
 
 void
