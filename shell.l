@@ -44,17 +44,9 @@
 "&"	{
 		return AND;
 	}
-
--[a-zA-Z0-9]+ {	printf("HELLOO");
-			yylval.string_val = strdup(yytext);
-			return ARG;
-			
-		}
-[^ \t\n\>\<\|\&\-]+ {
+[^ \t\n][^ \t\n]*  {
 		/* Assume that file names have only alpha chars */
-		
 		yylval.string_val = strdup(yytext);
-		
 		return WORD;
 	}
 
