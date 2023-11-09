@@ -1157,7 +1157,7 @@ yyreduce:
   case 6: /* simple_command: command_and_args iomodifier_opt NEWLINE  */
 #line 49 "shell.y"
                                                 {
-		printf("   Yacc: Execute command\n");
+		//printf("   Yacc: Execute command\n");
 		Command::_currentCommand.execute();
 	}
 #line 1164 "y.tab.c"
@@ -1172,7 +1172,7 @@ yyreduce:
   case 9: /* command_and_args: command_word arg_list  */
 #line 59 "shell.y"
                               {
-		printf("on top\n");
+
 		Command::_currentCommand.insertSimpleCommand( Command::_currentSimpleCommand );
 	}
 #line 1179 "y.tab.c"
@@ -1181,7 +1181,7 @@ yyreduce:
   case 10: /* command_and_args: command_and_args PIPE command_word arg_list  */
 #line 63 "shell.y"
                                                       {
-       printf("Yacc: You inserted PIPE Operator \n");
+       //printf("Yacc: You inserted PIPE Operator \n");
        Command::_currentCommand.insertSimpleCommand( Command::_currentSimpleCommand ); // Insert the new simple command into the new command 
 	}
 #line 1188 "y.tab.c"
@@ -1190,7 +1190,7 @@ yyreduce:
   case 13: /* argument: WORD  */
 #line 74 "shell.y"
              {
-               printf("   Yacc: insert argument \"%s\"\n", (yyvsp[0].string_val));
+              // printf("   Yacc: insert argument \"%s\"\n", $1);
 	       Command::_currentSimpleCommand->insertArgument( (yyvsp[0].string_val) );\
 	}
 #line 1197 "y.tab.c"
@@ -1199,7 +1199,7 @@ yyreduce:
   case 14: /* command_word: WORD  */
 #line 80 "shell.y"
              {
-            printf("   Yacc: insert command \"%s\"\n", (yyvsp[0].string_val));
+            //printf("   Yacc: insert command \"%s\"\n", $1);
 	       Command::_currentSimpleCommand = new SimpleCommand();
 	       Command::_currentSimpleCommand->insertArgument( (yyvsp[0].string_val) );
 	}

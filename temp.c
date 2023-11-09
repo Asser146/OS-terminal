@@ -16,10 +16,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <signal.h>
-#include <wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+
 #include "command.h"
 
 SimpleCommand::SimpleCommand()
@@ -41,7 +38,7 @@ void SimpleCommand::insertArgument(char *argument)
 
 	_arguments[_numberOfArguments] = argument;
 
-	//printf("inserting new argument in coomand.c file: %s\n", _arguments[_numberOfArguments]);
+	printf("inserting new argument in coomand.c file: %s\n", _arguments[_numberOfArguments]);
 
 	// Add NULL argument at the end
 	_arguments[_numberOfArguments + 1] = NULL;
@@ -136,88 +133,97 @@ void Command::print()
 	printf("\n\n");
 }
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
 void Command::handlePipes()
 {
+	int i;
 	int defaultin = dup(0);
 	int defaultout = dup(1);
-	int previousPipe[2];
-	pid_t lastChild;
 
-	for (int i = 0; i < _numberOfSimpleCommands; i++)
+	int prevPipe[2]; // Used to store the read end of the previous pipe
+	pid_t lastChild;
+	if (pipe(prevPipe) == -1)
 	{
-		int currentPipe[2];
-		if (pipe(currentPipe) == -1)
+		perror("pipe");
+		exit(2);
+	}
+	for (i = 0; i < _numberOfSimpleCommands; i++)
+	{
+		int currPipe[2]; // Used to create a new pipe
+
+		// Create a new pipe
+		if (pipe(currPipe) == -1)
 		{
-			perror("pipe creation error");
+			perror("pipe");
 			exit(2);
 		}
+
 		pid_t pid = fork();
+
 		if (pid == -1)
 		{
-			perror("fork error");
+			perror("fork");
 			exit(2);
 		}
 		else if (pid == 0)
 		{
-			if (i == 0)
-			{ // first Pipe ->default input , put output in current pipe
-				dup2(defaultin, 0);
-				close(currentPipe[0]);
-				dup2(currentPipe[1], 1);
-				close(defaultin);
+			if (i>0)
+			{
+				close(prevPipe[1]);
+				dup2(prevPipe[0], 0);
+				close(prevPipe[0]);
+			}
+			
+
+			// Mid Pipes
+			if (i < _numberOfSimpleCommands - 1)
+			{
+				close(currPipe[0]);
+				dup2(currPipe[1], 1); // Redirect output to the current pipe
+				close(currPipe[1]);
+			}
+			// Last Pipe
+			else if (i == _numberOfSimpleCommands - 1)
+			{
+				lastChild = pid;
+				dup2(defaultout, 1); 	
 			}
 
-			else if (i < _numberOfSimpleCommands - 1)
-			{ // mid pipes-> input from previous Pipe, output in current Pipe
-				close(currentPipe[0]);
-				close(previousPipe[1]);
-				dup2(previousPipe[0], 0);
-				dup2(currentPipe[1], 1);
-				close(currentPipe[1]);
-				close(previousPipe[0]);
-			}
-			else
-			{ // Last pipe -> input from previous Pipe, output to terminal or file
-				lastChild = pid;
-				close(currentPipe[0]);
-				close(currentPipe[1]);
-				close(previousPipe[1]);
-				dup2(previousPipe[0], 0);
-				dup2(defaultout, 1);
-				close(defaultout);
-			}
 			char path[20] = "/bin/";
 			strcat(path, _simpleCommands[i]->_arguments[0]);
 			execvp(path, _simpleCommands[i]->_arguments);
-			perror("Command Failed-->no command with this name\n");
+			perror("Command Failed-->no command with named\n");
 			exit(2);
 		}
 		else
 		{
-			if (i > 0)
+			if (i>0)
 			{
-				close(previousPipe[0]);
-				close(previousPipe[1]);
+				close(prevPipe[0]);
+				close(prevPipe[1]);
 			}
-			previousPipe[0] = currentPipe[0];
-			previousPipe[1] = currentPipe[1];
-			if (i == _numberOfSimpleCommands - 1)
-			{
-				close(currentPipe[0]);
-				close(currentPipe[1]);
-				dup2(defaultin, 0);
-				dup2(defaultout, 1);
-				close(defaultin);
-				close(defaultout);
-			}
-			// Wait only for the last child process
-			waitpid(lastChild, NULL, 0);
+			
+			// Save the current pipe for the next iteration
+			prevPipe[0] = currPipe[0];
+			prevPipe[1] = currPipe[1];
+			
 		}
 	}
+	close(prevPipe[0]);
+	close(prevPipe[1]);
+	// Wait for all child processes to finish
+		waitpid(lastChild,NULL,0);
+	
+	
 }
 
 void Command::execute()
 {
+
 	// Don't do anything if there are no simple commands
 	if (_numberOfSimpleCommands == 0)
 	{
@@ -240,7 +246,7 @@ void Command::execute()
 			char path[20] = "/bin/";
 			strcat(path, _simpleCommands[0]->_arguments[0]);
 			execvp(path, _simpleCommands[0]->_arguments);
-			perror("Command Failed-->no command with named %s\n");
+			perror("Command Failed-->no command with named \n");
 			exit(2);
 		}
 
@@ -253,8 +259,18 @@ void Command::execute()
 	{
 		this->handlePipes();
 	}
+
+	// Print contents of Command data structure
+	// print();
+	// Add execution here
+
+	// For every simple command fork a new process
+	// Setup i/o redirection
+	// and call exec
+
 	// Clear to prepare for next command
 	clear();
+
 	// Print new prompt
 	prompt();
 	//}
@@ -280,3 +296,4 @@ int main()
 
 	return 0;
 }
+

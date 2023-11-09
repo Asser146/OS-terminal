@@ -47,7 +47,7 @@ command: simple_command
 
 simple_command:	
 	command_and_args iomodifier_opt NEWLINE {
-		printf("   Yacc: Execute command\n");
+		//printf("   Yacc: Execute command\n");
 		Command::_currentCommand.execute();
 	}
 	| NEWLINE 
@@ -57,11 +57,11 @@ simple_command:
 
 command_and_args:
 	command_word arg_list {
-		printf("on top\n");
+
 		Command::_currentCommand.insertSimpleCommand( Command::_currentSimpleCommand );
 	}
 	| command_and_args PIPE command_word arg_list {
-       printf("Yacc: You inserted PIPE Operator \n");
+       //printf("Yacc: You inserted PIPE Operator \n");
        Command::_currentCommand.insertSimpleCommand( Command::_currentSimpleCommand ); // Insert the new simple command into the new command 
 	}
 	;
@@ -72,18 +72,18 @@ arg_list:
 
 argument:
 	WORD {
-               printf("   Yacc: insert argument \"%s\"\n", $1);
+              // printf("   Yacc: insert argument \"%s\"\n", $1);
 	       Command::_currentSimpleCommand->insertArgument( $1 );\
 	}
 	;
 command_word:
 	WORD {
-            printf("   Yacc: insert command \"%s\"\n", $1);
+            //printf("   Yacc: insert command \"%s\"\n", $1);
 	       Command::_currentSimpleCommand = new SimpleCommand();
 	       Command::_currentSimpleCommand->insertArgument( $1 );
 	}
 	|EXIT{
-	printf("exit was inserted\n");
+	printf("Bye\n");
 	return 0;
 	}
 	;
