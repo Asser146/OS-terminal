@@ -6,7 +6,7 @@
 struct SimpleCommand {
 	// Available space for arguments currently preallocated
 	int _numberOfAvailableArguments;
-
+bool _append=false;
 	// Number of arguments
 	int _numberOfArguments;
 	char ** _arguments;
@@ -28,7 +28,8 @@ struct Command {
 	void print();
 	void execute();
 	void clear();
-	void handlePipes();
+	void handlePipes(int defaultint,int defaultout);
+	void handleFiles(int command_number,int defaultout,int defaultoutput);
 	Command();
 	void insertSimpleCommand( SimpleCommand * simpleCommand );
 
