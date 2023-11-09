@@ -13,7 +13,7 @@
 
 %token	<string_val> WORD
 %token	<string_val> ARG
-%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND DASH
+%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND 
 %token PIPE
 %token EXIT
 %union	{

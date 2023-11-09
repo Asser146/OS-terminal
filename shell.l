@@ -44,9 +44,7 @@
 "&"	{
 		return AND;
 	}
-"-"     {
-		return DASH;
-	}
+
 -[a-zA-Z0-9]+ {	printf("HELLOO");
 			yylval.string_val = strdup(yytext);
 			return ARG;

@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 13
-#define YY_END_OF_BUFFER 14
+#define YY_NUM_RULES 12
+#define YY_END_OF_BUFFER 13
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,9 +362,9 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[25] =
     {   0,
-        0,    0,   14,   11,    4,    3,    8,   11,    9,    7,
-        6,   11,    1,   11,   11,    0,   10,    5,   11,   11,
-       12,   11,    2,    0
+        0,    0,   13,   10,    4,    3,    8,   10,   12,    7,
+        6,   10,    1,   10,   10,    0,    9,    5,   10,   10,
+       11,   10,    2,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -801,23 +801,16 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 47 "shell.l"
-{
-		return DASH;
-	}
-	YY_BREAK
-case 10:
-YY_RULE_SETUP
-#line 50 "shell.l"
+#line 48 "shell.l"
 {	printf("HELLOO");
 			yylval.string_val = strdup(yytext);
 			return ARG;
 			
 		}
 	YY_BREAK
-case 11:
+case 10:
 YY_RULE_SETUP
-#line 55 "shell.l"
+#line 53 "shell.l"
 {
 		/* Assume that file names have only alpha chars */
 		
@@ -826,20 +819,20 @@ YY_RULE_SETUP
 		return WORD;
 	}
 	YY_BREAK
-case 12:
+case 11:
 YY_RULE_SETUP
-#line 64 "shell.l"
+#line 62 "shell.l"
 {
 		/* Invalid character in input */
 		return NOTOKEN;
 	}
 	YY_BREAK
-case 13:
+case 12:
 YY_RULE_SETUP
-#line 69 "shell.l"
+#line 67 "shell.l"
 ECHO;
 	YY_BREAK
-#line 843 "lex.yy.c"
+#line 836 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1844,7 +1837,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 69 "shell.l"
+#line 67 "shell.l"
 
 	
 

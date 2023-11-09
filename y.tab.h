@@ -62,9 +62,8 @@ extern int yydebug;
     NEWLINE = 263,                 /* NEWLINE  */
     LESS = 264,                    /* LESS  */
     AND = 265,                     /* AND  */
-    DASH = 266,                    /* DASH  */
-    PIPE = 267,                    /* PIPE  */
-    EXIT = 268                     /* EXIT  */
+    PIPE = 266,                    /* PIPE  */
+    EXIT = 267                     /* EXIT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -81,9 +80,8 @@ extern int yydebug;
 #define NEWLINE 263
 #define LESS 264
 #define AND 265
-#define DASH 266
-#define PIPE 267
-#define EXIT 268
+#define PIPE 266
+#define EXIT 267
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -94,7 +92,7 @@ union YYSTYPE
 		char   *string_val;
 	
 
-#line 98 "y.tab.h"
+#line 96 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
