@@ -16,6 +16,7 @@
 %token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND
 %token PIPE
 %token EXIT
+//%token CD
 %union	{
 		char   *string_val;
 	}
@@ -43,8 +44,9 @@ commands:
 	;
 
 command: simple_command
+        
         ;
-
+        
 
 simple_command:	
 	command_and_args iomodifier_opt NEWLINE {
@@ -95,6 +97,11 @@ command_word:
 	printf("Bye\n");
 	return 0;
 	}
+	//|CD { 
+	//printf ("hi\n");
+	//return 0;
+	//Command::cd(\$2);}
+	//}
 	;
 
 iomodifier_opt:

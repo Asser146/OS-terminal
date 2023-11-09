@@ -65,6 +65,18 @@ Command::Command()
 
 void Command::insertSimpleCommand(SimpleCommand *simpleCommand)
 {
+
+       // ana m7tag agrab fe kol mkan d5ool el cd hya 7aga asasya hwa m4 hyfhamo ka command 3ando hwa lazm ydect awlo ma y5o4 law tala3 hwa yroo7 y3ml functions lw7do
+        if (strcmp(command, "cd") == 0) {
+        printf("ana foo2);
+    if (chdir(directory) != 0) {
+        perror("cd");
+        // Handle the error appropriately
+    }
+    // Update the current directory or perform other actions as needed.
+    return;
+}
+
 	if (_numberOfAvailableSimpleCommands == _numberOfSimpleCommands)
 	{
 		_numberOfAvailableSimpleCommands *= 2;
@@ -248,9 +260,75 @@ void Command::handlePipes(int defaultin, int defaultout)
 	}
 }
 
+// deh el fucntion el habla
+void cd(char *dir) {
+       if (dir == NULL) {
+           printf("test1");
+           dir = getenv("HOME");
+       }
+
+       if (chdir(dir) != 0) {
+           printf("3brny argook");
+           perror("cd");
+       }
+   }
+   
+   
+   // deh el fucntion el kbeera
+int change_directory(char* dir) {
+    if (dir == NULL) {
+        const char* home_dir = getenv("HOME");
+        if (home_dir == NULL) {
+            fprintf(stderr, "el denia bayza\n");
+            return -1;
+        }
+        dir = (char*)home_dir;
+    }
+
+    if (chdir(dir) == -1) {
+        perror("chdir");
+        return -1;
+    }
+
+    return 0;
+
 void Command::execute()
 {
 	// Don't do anything if there are no simple commands
+	
+	//
+	if (strcmp(command, "cd") == 0) {
+	printf("hhhheeeheheheheh");
+    if (chdir(directory) != 0) {
+    //printf("hhhheeeheheheheh");
+        perror("cd");
+        // Handle the error appropriately
+    }
+    // Update the current directory or perform other actions as needed.
+    return;
+}
+
+	
+	
+	// de awil taree2a le calling wa7da mn el functions pretty simple kont b7awil a4oof beeha ay 7aga
+       if (Command == "cd") {
+           printf("easy  call");
+           cd(args[0]);
+       }
+       
+       // de tany wa7da el akbar 4wya el mafrood gbt 2aly tmam 3ala el function el foo2 we 2aly dah el calling leeha
+       if (strcmp(Command, "cd") == 0) {
+       char* dir = NULL;
+       if (num_args > 1) {
+           dir = args[1];
+       }
+       if (change_directory(dir) == -1) {
+        // el mafrood hena ne handle el errors
+       }
+       } else {
+          // Execute other commands (e.g., using execvp)
+       }    
+
 	if (_numberOfSimpleCommands == 0)
 	{
 		prompt();
