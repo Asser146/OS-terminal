@@ -21,6 +21,26 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "command.h"
+#include <ostream>
+#include <fstream>
+#include <iostream>
+#include <chrono>
+#include <ctime>
+
+void childTerminated(pid_t pid)
+{
+	auto now = std::chrono::system_clock::now();
+	std::time_t end_time = std::chrono::system_clock::to_time_t(now);
+
+	struct tm *timeinfo = localtime(&end_time);
+
+	char buffer[80];
+	strftime(buffer, 80, "%d-%m-%Y %H:%M", timeinfo);
+	std::ofstream logfile("logfile.log", std::ios_base::app);
+
+	logfile << buffer<< " Child process " << pid << " terminated" << std::endl;
+	logfile.close();
+}
 
 SimpleCommand::SimpleCommand()
 {
@@ -78,7 +98,7 @@ void Command::insertSimpleCommand(SimpleCommand *simpleCommand)
 void Command::clear()
 {
 
-	printf("in clear\n");
+	//printf("in clear\n");
 	for (int i = 0; i < _numberOfSimpleCommands; i++)
 	{
 		for (int j = 0; j < _simpleCommands[i]->_numberOfArguments; j++)
@@ -214,12 +234,15 @@ void Command::handlePipes()
 			}
 			// Wait only for the last child process
 			waitpid(lastChild, NULL, 0);
+			childTerminated(pid);
+			//logChildTermination(logFile, lastChild);
 		}
 	}
 }
 
 void Command::execute()
 {
+	
 	// Don't do anything if there are no simple commands
 	if (_numberOfSimpleCommands == 0)
 	{
@@ -228,7 +251,7 @@ void Command::execute()
 	}
 	// There is Pipes
 	else if (_numberOfSimpleCommands == 1)
-	{
+	{	
 		pid_t pid;
 		pid = fork();
 		if (pid < 0)
@@ -248,7 +271,11 @@ void Command::execute()
 
 		else
 		{
+		 
 			wait(NULL);
+			childTerminated(pid);
+			//waitpid( pid, 0, 0 );
+			
 		}
 	}
 	else
@@ -278,8 +305,8 @@ int yyparse(void);
 int main()
 {
 	signal(SIGINT, SIG_IGN);
+		
 	Command::_currentCommand.prompt();
 	yyparse();
-
 	return 0;
 }

@@ -12,8 +12,8 @@
  */
 
 %token	<string_val> WORD
-
-%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND
+%token	<string_val> ARG
+%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND DASH
 %token PIPE
 %token EXIT
 %union	{
@@ -81,13 +81,17 @@ arg_list:
 
 argument:
 	WORD {
-              // printf("   Yacc: insert argument \"%s\"\n", $1);
+               printf("   Yacc: insert argument \"%s\"\n", $1);
+	       Command::_currentSimpleCommand->insertArgument( $1 );\
+	}
+	|ARG{
+		printf("   Yacc: insert argument \"%s\"\n", $1);
 	       Command::_currentSimpleCommand->insertArgument( $1 );\
 	}
 	;
 command_word:
 	WORD {
-            //printf("   Yacc: insert command \"%s\"\n", $1);
+           printf("   Yacc: insert command \"%s\"\n", $1);
 	       Command::_currentSimpleCommand = new SimpleCommand();
 	       Command::_currentSimpleCommand->insertArgument( $1 );
 	}
