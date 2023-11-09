@@ -41,8 +41,8 @@
 		return LESS;
 	}
 	
-"^C"	{
-
+"&"	{
+		return AND;
 	}
 [^ \t\n][^ \t\n]*  {
 		/* Assume that file names have only alpha chars */

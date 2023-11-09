@@ -77,6 +77,8 @@ void Command::insertSimpleCommand(SimpleCommand *simpleCommand)
 
 void Command::clear()
 {
+
+	printf("in clear\n");
 	for (int i = 0; i < _numberOfSimpleCommands; i++)
 	{
 		for (int j = 0; j < _simpleCommands[i]->_numberOfArguments; j++)
@@ -275,6 +277,7 @@ int yyparse(void);
 
 int main()
 {
+	signal(SIGINT, SIG_IGN);
 	Command::_currentCommand.prompt();
 	yyparse();
 

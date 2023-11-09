@@ -13,7 +13,7 @@
 
 %token	<string_val> WORD
 
-%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS
+%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND
 %token PIPE
 %token EXIT
 %union	{
@@ -45,15 +45,24 @@ commands:
 command: simple_command
         ;
 
+
 simple_command:	
 	command_and_args iomodifier_opt NEWLINE {
-		//printf("   Yacc: Execute command\n");
+		printf("   Yacc: Execute command\n");
 		Command::_currentCommand.execute();
 	}
 	| NEWLINE 
-	| error NEWLINE { yyerrok; }
+	| command_and_args AND NEWLINE{
+		printf("& was inserted\n");
+		printf("Yacc: Execute command\n");
+		Command::_currentCommand.execute();
+	}
+	| command_and_args error NEWLINE { 
+		Command::_currentCommand.clear();
+		yyerrok; 
+	}
+	| error NEWLINE { yyerrok;}
 	;
-
 
 command_and_args:
 	command_word arg_list {
@@ -98,7 +107,7 @@ iomodifier_opt:
 		Command::_currentCommand._outFile = $2;
 	}
 	|LESS WORD {
-	printf("   Yacc: insert output 3 \"%s\"\n", $2);
+	printf("   Yacc: insert input 3 \"%s\"\n", $2);
 		Command::_currentCommand._inputFile = $2;
 	}
 	| /* can be empty */ 
