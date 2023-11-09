@@ -55,15 +55,14 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     WORD = 258,                    /* WORD  */
-    ARG = 259,                     /* ARG  */
-    NOTOKEN = 260,                 /* NOTOKEN  */
-    GREAT = 261,                   /* GREAT  */
-    GREAT2 = 262,                  /* GREAT2  */
-    NEWLINE = 263,                 /* NEWLINE  */
-    LESS = 264,                    /* LESS  */
-    AND = 265,                     /* AND  */
-    PIPE = 266,                    /* PIPE  */
-    EXIT = 267                     /* EXIT  */
+    NOTOKEN = 259,                 /* NOTOKEN  */
+    GREAT = 260,                   /* GREAT  */
+    GREAT2 = 261,                  /* GREAT2  */
+    NEWLINE = 262,                 /* NEWLINE  */
+    LESS = 263,                    /* LESS  */
+    AND = 264,                     /* AND  */
+    PIPE = 265,                    /* PIPE  */
+    EXIT = 266                     /* EXIT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -73,15 +72,14 @@ extern int yydebug;
 #define YYerror 256
 #define YYUNDEF 257
 #define WORD 258
-#define ARG 259
-#define NOTOKEN 260
-#define GREAT 261
-#define GREAT2 262
-#define NEWLINE 263
-#define LESS 264
-#define AND 265
-#define PIPE 266
-#define EXIT 267
+#define NOTOKEN 259
+#define GREAT 260
+#define GREAT2 261
+#define NEWLINE 262
+#define LESS 263
+#define AND 264
+#define PIPE 265
+#define EXIT 266
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -92,7 +90,7 @@ union YYSTYPE
 		char   *string_val;
 	
 
-#line 96 "y.tab.h"
+#line 94 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
