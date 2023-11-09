@@ -136,7 +136,7 @@ void Command::print()
 		   _background ? "YES" : "NO");
 	printf("\n\n");
 }
-void Command::handleFiles(int i, int defaultout)
+void Command::handleFiles(int i, int myinput, int myoutput)
 {
 	if (_outFile)
 	{
@@ -149,13 +149,30 @@ void Command::handleFiles(int i, int defaultout)
 			exit(2);
 		}
 		// Redirect output to the created utfile instead off printing to stdout
+		dup2(myinput, 0);
+		close(myinput);
 		dup2(outfd, 1);
 		close(outfd);
+		return;
 	}
+	else if (_inputFile)
+	{
+		int infd=open(_inputFile,O_RDONLY,0666);
+		
+		if (infd < 0)
+		{
+			perror("Error: creat infile");
+			exit(2);
+		}
+		dup2(infd, 0);
+		close(infd);
+	}
+
 	else
 	{
-		dup2(defaultout, 1);
-		close(defaultout);
+		close(myoutput);
+		close(myinput);
+		return;
 	}
 }
 void Command::handlePipes(int defaultin, int defaultout)
@@ -191,9 +208,7 @@ void Command::handlePipes(int defaultin, int defaultout)
 			}
 			else
 			{ // Last pipe -> input from previous Pipe, output to terminal or file
-
-				dup2(previousPipe[0], 0);
-				this->handleFiles(i, defaultout);
+				this->handleFiles(i, previousPipe[0], defaultout);
 				lastChild = pid;
 			}
 			close(previousPipe[0]);
@@ -256,7 +271,7 @@ void Command::execute()
 
 		else if (pid == 0)
 		{
-			this->handleFiles(0, defaultout);
+			this->handleFiles(0, defaultin, defaultout);
 			close(defaultin);
 			close(defaultout);
 			char path[20] = "/bin/";

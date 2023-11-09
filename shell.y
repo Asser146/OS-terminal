@@ -109,7 +109,7 @@ iomodifier_opt:
 		;
 	}
 	|LESS WORD {
-	printf("   Yacc: insert input 3 \"%s\"\n", $2);
+	//printf("   Yacc: insert input 3 \"%s\"\n", $2);
 		Command::_currentCommand._inputFile = $2;
 	}
 	| /* can be empty */ 

@@ -29,7 +29,7 @@ struct Command {
 	void execute();
 	void clear();
 	void handlePipes(int defaultint,int defaultout);
-	void handleFiles(int command_number,int defaultout);
+	void handleFiles(int command_number,int defaultout,int defaultoutput);
 	Command();
 	void insertSimpleCommand( SimpleCommand * simpleCommand );
 

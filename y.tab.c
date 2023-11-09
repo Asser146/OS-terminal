@@ -1268,7 +1268,7 @@ yyreduce:
   case 20: /* iomodifier_opt: LESS WORD  */
 #line 111 "shell.y"
                    {
-	printf("   Yacc: insert input 3 \"%s\"\n", (yyvsp[0].string_val));
+	//printf("   Yacc: insert input 3 \"%s\"\n", $2);
 		Command::_currentCommand._inputFile = (yyvsp[0].string_val);
 	}
 #line 1275 "y.tab.c"
