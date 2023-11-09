@@ -41,7 +41,7 @@ void SimpleCommand::insertArgument(char *argument)
 
 	_arguments[_numberOfArguments] = argument;
 
-	//printf("inserting new argument in coomand.c file: %s\n", _arguments[_numberOfArguments]);
+	// printf("inserting new argument in coomand.c file: %s\n", _arguments[_numberOfArguments]);
 
 	// Add NULL argument at the end
 	_arguments[_numberOfArguments + 1] = NULL;
@@ -77,10 +77,9 @@ void Command::insertSimpleCommand(SimpleCommand *simpleCommand)
 
 void Command::clear()
 {
-
-	printf("in clear\n");
 	for (int i = 0; i < _numberOfSimpleCommands; i++)
 	{
+		_simpleCommands[i]->_append = false;
 		for (int j = 0; j < _simpleCommands[i]->_numberOfArguments; j++)
 		{
 			free(_simpleCommands[i]->_arguments[j]);
@@ -137,14 +136,32 @@ void Command::print()
 		   _background ? "YES" : "NO");
 	printf("\n\n");
 }
-
-void Command::handlePipes()
+void Command::handleFiles(int i, int defaultout)
 {
-	int defaultin = dup(0);
-	int defaultout = dup(1);
+	if (_outFile)
+	{
+		int outfd = _simpleCommands[i]->_append ? open(_outFile, O_WRONLY | O_CREAT | O_APPEND, 0666)
+												: open(_outFile, O_WRONLY | O_CREAT, 0666);
+
+		if (outfd < 0)
+		{
+			perror("Error: creat outfile");
+			exit(2);
+		}
+		// Redirect output to the created utfile instead off printing to stdout
+		dup2(outfd, 1);
+		close(outfd);
+	}
+	else
+	{
+		dup2(defaultout, 1);
+		close(defaultout);
+	}
+}
+void Command::handlePipes(int defaultin, int defaultout)
+{
 	int previousPipe[2];
 	pid_t lastChild;
-
 	for (int i = 0; i < _numberOfSimpleCommands; i++)
 	{
 		int currentPipe[2];
@@ -164,30 +181,27 @@ void Command::handlePipes()
 			if (i == 0)
 			{ // first Pipe ->default input , put output in current pipe
 				dup2(defaultin, 0);
-				close(currentPipe[0]);
 				dup2(currentPipe[1], 1);
-				close(defaultin);
 			}
 
 			else if (i < _numberOfSimpleCommands - 1)
 			{ // mid pipes-> input from previous Pipe, output in current Pipe
-				close(currentPipe[0]);
-				close(previousPipe[1]);
 				dup2(previousPipe[0], 0);
 				dup2(currentPipe[1], 1);
-				close(currentPipe[1]);
-				close(previousPipe[0]);
 			}
 			else
 			{ // Last pipe -> input from previous Pipe, output to terminal or file
-				lastChild = pid;
-				close(currentPipe[0]);
-				close(currentPipe[1]);
-				close(previousPipe[1]);
+
 				dup2(previousPipe[0], 0);
-				dup2(defaultout, 1);
-				close(defaultout);
+				this->handleFiles(i, defaultout);
+				lastChild = pid;
 			}
+			close(previousPipe[0]);
+			close(previousPipe[1]);
+			close(currentPipe[0]);
+			close(currentPipe[1]);
+			close(defaultin);
+			close(defaultout);
 			char path[20] = "/bin/";
 			strcat(path, _simpleCommands[i]->_arguments[0]);
 			execvp(path, _simpleCommands[i]->_arguments);
@@ -201,6 +215,7 @@ void Command::handlePipes()
 				close(previousPipe[0]);
 				close(previousPipe[1]);
 			}
+			// Save Last operation output/input
 			previousPipe[0] = currentPipe[0];
 			previousPipe[1] = currentPipe[1];
 			if (i == _numberOfSimpleCommands - 1)
@@ -226,8 +241,10 @@ void Command::execute()
 		prompt();
 		return;
 	}
+	int defaultin = dup(0);
+	int defaultout = dup(1);
 	// There is Pipes
-	else if (_numberOfSimpleCommands == 1)
+	if (_numberOfSimpleCommands == 1)
 	{
 		pid_t pid;
 		pid = fork();
@@ -239,6 +256,9 @@ void Command::execute()
 
 		else if (pid == 0)
 		{
+			this->handleFiles(0, defaultout);
+			close(defaultin);
+			close(defaultout);
 			char path[20] = "/bin/";
 			strcat(path, _simpleCommands[0]->_arguments[0]);
 			execvp(path, _simpleCommands[0]->_arguments);
@@ -248,12 +268,16 @@ void Command::execute()
 
 		else
 		{
+			dup2(defaultin, 0);
+			dup2(defaultout, 1);
+			close(defaultin);
+			close(defaultout);
 			wait(NULL);
 		}
 	}
 	else
 	{
-		this->handlePipes();
+		this->handlePipes(defaultin, defaultout);
 	}
 	// Clear to prepare for next command
 	clear();

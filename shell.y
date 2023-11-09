@@ -48,7 +48,7 @@ command: simple_command
 
 simple_command:	
 	command_and_args iomodifier_opt NEWLINE {
-		printf("   Yacc: Execute command\n");
+		//printf("   Yacc: Execute command\n");
 		Command::_currentCommand.execute();
 	}
 	| NEWLINE 
@@ -99,12 +99,14 @@ command_word:
 
 iomodifier_opt:
 	GREAT WORD {
-		printf("   Yacc: insert output 3 \"%s\"\n", $2);
+		//printf("   Yacc: insert output 3 \"%s\"\n", $2);
 		Command::_currentCommand._outFile = $2;
 	}
 	|GREAT2 WORD {
-		printf("   Yacc: insert output 3 \"%s\"\n", $2);
+	//	printf("   Yacc: insert output 3 \"%s\"\n", $2);
 		Command::_currentCommand._outFile = $2;
+		Command::_currentSimpleCommand->_append=true;
+		;
 	}
 	|LESS WORD {
 	printf("   Yacc: insert input 3 \"%s\"\n", $2);
