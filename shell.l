@@ -19,9 +19,13 @@
 	}
 
 "exit" 	{
-	return EXIT;
-}
+		return EXIT;
+	}
 
+"cd"	{
+		yylval.string_val = strdup(yytext);
+		return CD;
+		}
 \n 	{
 		return NEWLINE;
 	}
@@ -45,19 +49,18 @@
 		return AND;
 	}
 
--[a-zA-Z0-9]+ {	printf("HELLOO");
+-[a-zA-Z0-9]+ 	    {	
 			yylval.string_val = strdup(yytext);
 			return ARG;
+		    }
+[^ \t\n\>\<\|\&\-\/]+ {
+			/* Assume that file names have only alpha chars */
+			yylval.string_val = strdup(yytext);
 			
-		}
-[^ \t\n\>\<\|\&\-]+ {
-		/* Assume that file names have only alpha chars */
-		
-		yylval.string_val = strdup(yytext);
-		
-		return WORD;
-	}
+			return WORD;
+	   	    }	
 
+	   	    	
 
 '.'	{
 		/* Invalid character in input */

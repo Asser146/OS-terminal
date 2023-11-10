@@ -32,7 +32,7 @@ struct Command {
 	void handleFiles(int command_number,int defaultout,int defaultoutput);
 	Command();
 	void insertSimpleCommand( SimpleCommand * simpleCommand );
-
+	int change_directory(char* dir);
 	static Command _currentCommand;
 	static SimpleCommand *_currentSimpleCommand;
 };

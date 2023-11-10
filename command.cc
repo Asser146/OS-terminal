@@ -85,6 +85,7 @@ Command::Command()
 
 void Command::insertSimpleCommand(SimpleCommand *simpleCommand)
 {
+printf("inserting command\n");
 	if (_numberOfAvailableSimpleCommands == _numberOfSimpleCommands)
 	{
 		_numberOfAvailableSimpleCommands *= 2;
@@ -131,6 +132,31 @@ void Command::clear()
 	_inputFile = 0;
 	_errFile = 0;
 	_background = 0;
+}
+
+int Command::change_directory(char* dir)
+{
+printf("some code");
+//clear();
+	// Print new prompt
+	//prompt();
+	
+	
+	/*if (dir == NULL) {
+        const char* home_dir = getenv("HOME");
+        if (home_dir == NULL) {
+            fprintf(stderr, "el denia bayza\n");
+            return -1;
+        }
+        dir = (char*)home_dir;
+    }
+
+    if (chdir(dir) == -1) {
+        perror("chdir");
+        return -1;
+    }
+*/
+    return 0;
 }
 
 void Command::print()
@@ -267,7 +293,6 @@ void Command::handlePipes(int defaultin, int defaultout)
 			// Wait only for the last child process
 			waitpid(lastChild, NULL, 0);
 			childTerminated(pid);
-			//logChildTermination(logFile, lastChild);
 		}
 	}
 }
@@ -285,12 +310,8 @@ void Command::execute()
 	int defaultout = dup(1);
 	// There is Pipes
 
-	else if (_numberOfSimpleCommands == 1)
-	{	
-
 	if (_numberOfSimpleCommands == 1)
-	{
-
+	{	
 		pid_t pid;
 		pid = fork();
 		if (pid < 0)
@@ -320,8 +341,7 @@ void Command::execute()
 			close(defaultout);
 			wait(NULL);
 			childTerminated(pid);
-			//waitpid( pid, 0, 0 );
-			
+
 		}
 	}
 	else
