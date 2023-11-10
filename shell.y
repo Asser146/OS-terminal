@@ -14,7 +14,6 @@
 %token	<string_val> WORD
 %token	<string_val> ARG
 %token	<string_val> CD
-%token	<string_val> DIR
 %token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND  
 %token PIPE
 %token EXIT
@@ -30,6 +29,7 @@ extern "C"
 }
 #define yylex yylex
 #include <stdio.h>
+#include <unistd.h>
 #include "command.h"
 %}
 
@@ -63,19 +63,28 @@ simple_command:
 		Command::_currentCommand.clear();
 		yyerrok; 
 	}
-	|CD {
-	printf("cd inserted\n");
-	Command::_currentCommand.change_directory(NULL);
+	| CD WORD NEWLINE{
+		char ss[100];
+		printf("your directory was %s\n",getcwd(ss,100));
+		chdir($2);
+		printf("current directory is %s\n",getcwd(ss,100));
+		Command::_currentCommand.prompt();
 	}
-	/*|CD DIR{
-	printf("cd and dir inserted\n");
-	Command::_currentCommand.change_directory($2);
-	}*/
+	| CD NEWLINE{
+	char ss[100];
+		printf("your directory was %s\n",getcwd(ss,100));
+		chdir("/home");
+		printf("current directory is %s\n",getcwd(ss,100));
+		Command::_currentCommand.prompt();
+	
+	}
 	|EXIT{
 	printf("Bye\n");
 	return 0;
 	}
-	| error NEWLINE { yyerrok;}
+	| error NEWLINE {
+	Command::_currentCommand.clear();
+	 yyerrok;}
 	;
 
 command_and_args:
