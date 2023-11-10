@@ -1,3 +1,0 @@
-shell
-shell.l
-shell.y

@@ -12,8 +12,10 @@
  */
 
 %token	<string_val> WORD
-
-%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND
+%token	<string_val> ARG
+%token	<string_val> CD
+%token	<string_val> DIR
+%token 	NOTOKEN GREAT GREAT2 NEWLINE LESS AND  
 %token PIPE
 %token EXIT
 %union	{
@@ -57,7 +59,7 @@ simple_command:
 		printf("Yacc: Execute command\n");
 		Command::_currentCommand.execute();
 	}
-	| command_and_args error NEWLINE { 
+	| command_and_args error NEWLINE{ 
 		Command::_currentCommand.clear();
 		yyerrok; 
 	}
@@ -65,6 +67,10 @@ simple_command:
 	printf("cd inserted\n");
 	Command::_currentCommand.change_directory(NULL);
 	}
+	/*|CD DIR{
+	printf("cd and dir inserted\n");
+	Command::_currentCommand.change_directory($2);
+	}*/
 	|EXIT{
 	printf("Bye\n");
 	return 0;
@@ -78,7 +84,7 @@ command_and_args:
 		Command::_currentCommand.insertSimpleCommand( Command::_currentSimpleCommand );
 	}
 	| command_and_args PIPE command_word arg_list {
-      //printf("Yacc: You inserted PIPE Operator \n");
+       //printf("Yacc: You inserted PIPE Operator \n");
        Command::_currentCommand.insertSimpleCommand( Command::_currentSimpleCommand ); // Insert the new simple command into the new command 
 	}
 	;
@@ -92,10 +98,15 @@ argument:
               // printf("   Yacc: insert argument \"%s\"\n", $1);
 	       Command::_currentSimpleCommand->insertArgument( $1 );\
 	}
+	|ARG{
+		//printf("   Yacc: insert argument \"%s\"\n", $1);
+	       Command::_currentSimpleCommand->insertArgument( $1 );\
+	}
+	//|
 	;
 command_word:
 	WORD {
-            //printf("   Yacc: insert command \"%s\"\n", $1);
+           //printf("   Yacc: insert command \"%s\"\n", $1);
 	       Command::_currentSimpleCommand = new SimpleCommand();
 	       Command::_currentSimpleCommand->insertArgument( $1 );
 	}
