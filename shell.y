@@ -61,6 +61,14 @@ simple_command:
 		Command::_currentCommand.clear();
 		yyerrok; 
 	}
+	|CD {
+	printf("cd inserted\n");
+	Command::_currentCommand.change_directory(NULL);
+	}
+	|EXIT{
+	printf("Bye\n");
+	return 0;
+	}
 	| error NEWLINE { yyerrok;}
 	;
 
@@ -90,10 +98,6 @@ command_word:
             //printf("   Yacc: insert command \"%s\"\n", $1);
 	       Command::_currentSimpleCommand = new SimpleCommand();
 	       Command::_currentSimpleCommand->insertArgument( $1 );
-	}
-	|EXIT{
-	printf("Bye\n");
-	return 0;
 	}
 	;
 
