@@ -58,9 +58,7 @@
 			yylval.string_val = strdup(yytext);
 			
 			return WORD;
-	   	    }	
-
-	   	    	
+	   	    }		   
 
 '.'	{
 		/* Invalid character in input */
