@@ -1,0 +1,14 @@
+11-11-2023 22:49 Child process 8932  ls terminated
+11-11-2023 22:49 Child process 8932  ls terminated
+11-11-2023 22:49 Child process 8933  ls terminated
+11-11-2023 22:49 Child process 8933  ls terminated
+11-11-2023 22:51 Child process 9032  ls terminated
+11-11-2023 22:51 Child process 9048  ls terminated
+11-11-2023 22:51 Child process 9050  ls terminated
+11-11-2023 22:51 Child process 9050  ls terminated
+11-11-2023 22:52 Child process 9054  cat shell.y terminated
+11-11-2023 22:52 Child process 9054  cat shell.y terminated
+11-11-2023 22:52 Child process 9062  cat shell.y terminated
+11-11-2023 22:52 Child process 9063  grep main terminated
+11-11-2023 22:53 Child process 9069  cat terminated
+11-11-2023 22:53 Child process 9070  grep main shell.y terminated
