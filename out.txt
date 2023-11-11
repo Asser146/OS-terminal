@@ -1,3 +1,0 @@
--rwxrwxr-x 1 farah farah 103456 Nov 10 18:30 shell
--rw-rw-r-- 1 farah farah    767 Nov 10 18:22 shell.l
--rw-rw-r-- 1 farah farah   2996 Nov 10 18:30 shell.y
